@@ -143,3 +143,12 @@ y = z + 8
 ```
 
 * Answer: `waxOn = let z = 7; y = z + 8; x = y ^ 2 in x * 5`
+
+### Rewrite `waxOn` as an expression with a `where` clause:
+
+```haskell
+waxOn     = x * 5
+  where z = 7
+        y = z + 8
+        x = y ^ 2
+```
