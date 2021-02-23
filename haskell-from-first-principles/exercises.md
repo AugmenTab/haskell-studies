@@ -211,15 +211,15 @@ exclaim :: String -> String
 exclaim s = (++) s "!"
 
 
-returnFifthChar :: String -> String
-returnFifthChar s = [(!!) s 4]
+returnFifthLetter :: String -> String
+returnFifthLetter s = [(!!) s 4]
 
 
 stripFirst9 :: String -> String
 stripFirst9 s = drop 9 s
 ```
 
-### Building functions 3: Write a function of type `String -> Char` that returns the third character in a `String`.  Give the function a name, apply it to a variable, not a specific `String`, so that it can be reused for different `String` inputs.
+### Building functions 3: Write a function of type `String -> Char` that returns the third character in a `String`.  Give the function a name, then apply it to a variable, not a specific `String`, so that it can be reused for different `String` inputs.
 
 ```haskell
 thirdLetter :: String -> Char
