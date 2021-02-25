@@ -7,11 +7,11 @@ sayHello x =
   putStrLn ("Hello, " ++ x ++ "!")
 
 
-triple :: Int -> Int
+triple :: Integer -> Integer
 triple x =
   x * 3
 
 
-pow :: Int -> Int -> Int
+pow :: Integer -> Integer -> Integer
 pow x y =
   x ^ y

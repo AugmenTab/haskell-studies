@@ -2,13 +2,13 @@
 module Learn where
 
 
-x :: Int
+x :: Integer
 x = 10 * 5 + y
 
 
-myResult :: Int
+myResult :: Integer
 myResult = x * 5
 
 
-y :: Int
+y :: Integer
 y = 10
