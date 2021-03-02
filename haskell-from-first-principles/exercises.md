@@ -383,3 +383,15 @@ f (a b) = A
    * a
 4. Which of the following types is the type of `+`?
    * d
+
+## Chapter 05:
+
+### Type matching: Math the function to its type signature.
+
+Presented as `function ⇒ type signature`:
+
+1. a &rArr; c
+2. b &rArr; d
+3. c &rArr; b
+4. d &rArr; a
+5. e &rArr; e
