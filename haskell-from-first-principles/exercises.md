@@ -530,3 +530,179 @@ functionS (x, y) = y
 1. `[a] -> a`
 2. `functionC :: Ord a => a -> a -> Bool`
 3. `functionS :: (a, b) -> b`
+
+### Given a type, write the function: You will be shown a type and a function that needs to be written. Use the information the type provides to determine what the function should do.
+
+1. `i :: a -> a`
+   * `i a = a`
+2. `c :: a -> b -> a`
+   * `c a _ = a`
+3. `c'' :: b -> a -> b` -- Given alpha equivalence, are the variables `c''` and `c` from the previous question the same thing?
+   * `c'' b _ = b` -- Yes, they are the same. Both are still taking in two variables and returning only the first.
+4. `c' :: a -> b -> b`
+   * `c' _ b = b`
+5. `r :: [a] -> [a]`
+   * `r a = tail a`
+6. `co :: (b -> c) -> (a -> b) -> a -> c`
+   * `co bToC aToB a = bToC $ aToB a`
+7. `a :: (a -> c) -> a -> a`
+   * `a = _ a = a`
+8. `a' :: (a -> b) -> a -> b`
+   * `a' aToB a = aToB a`
+
+### Fix it 1: Fix the broken code.
+
+```haskell
+-- Broken
+module sing where
+
+
+fstString :: [Char] ++ [Char]
+fstString x = x ++ " in the rain"
+
+
+sndString :: [Char] -> Char
+sndString x = x ++ " over the rainbow"
+
+
+sing = if (x > y) then
+         fstString x or sndString y
+where x = "Singin"
+      x = "Somewhere"
+```
+
+```haskell
+-- Fixed
+module Sing where
+
+
+fstString :: [Char] -> [Char]
+fstString x = x ++ " in the rain"
+
+
+sndString :: [Char] -> [Char]
+sndString x = x ++ " over the rainbow"
+
+
+sing = if (x > y) 
+         then fstString x
+         else sndString y
+         where x = "Singin"
+               y = "Somewhere"
+```
+
+### Fix it 2: Make a minor change so that it sings the other song.
+
+```haskell
+module Sing where
+
+
+fstString :: [Char] -> [Char]
+fstString x = x ++ " in the rain"
+
+
+sndString :: [Char] -> Char
+sndString x = x ++ " over the rainbow"
+
+
+sing = if (x < y) 
+         then fstString x
+         else sndString y
+         where x = "Singin"
+               y = "Somewhere"
+```
+
+### Fix it 3
+
+```haskell
+-- arith3broken.hs
+module Arith3Broken where
+
+
+main :: IO ()
+Main = do
+  print 1 + 2
+  putStrLn 10
+  print (negate -1)
+  print ((+) 0 blah)
+  where blah = negate 1
+```
+
+```haskell
+-- arith3fixed.hs
+module Arith3Fixed where
+
+
+main :: IO ()
+main =
+  do print (1 + 2)
+     putStrLn $ show 10
+     print (negate (-1))
+     print ((+) 0 blah)
+       where blah = negate 1
+```
+
+### Type-Kwon-Do: Repair the `???` declaration so that it passes the type checker.
+
+```haskell
+-- 1
+f :: Int -> String
+f = undefined
+
+
+g :: String -> Char
+g = undefined
+
+
+h :: Int -> Char
+h = ???
+
+
+-- 2
+data A
+data B
+data C
+
+
+q :: A -> B
+q = undefined
+
+
+w :: B -> C
+w = undefined
+
+
+e :: A -> C
+e = ???
+
+
+-- 3
+data X
+data Y
+data Z
+
+
+xz :: X -> Z
+xz = undefined
+
+
+yz :: Y -> Z
+yz = undefined
+
+
+xform :: (X, Y) -> (Z, Z)
+xform = ???
+
+
+-- 4
+munge :: (x -> y)
+      -> (y -> (w, z))
+      -> x
+      -> w
+munge = ???
+```
+
+1. `h x = g $ f x`
+2. `e x = w $ q x`
+3. `xform (x, y) = (,) (xz x) (yz y)`
+4. `munge xToY yToWZ x = fst $ yToWZ $ xToY x`
