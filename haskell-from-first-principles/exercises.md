@@ -706,3 +706,9 @@ munge = ???
 2. `e x = w $ q x`
 3. `xform (x, y) = (,) (xz x) (yz y)`
 4. `munge xToY yToWZ x = fst $ yToWZ $ xToY x`
+
+## Chapter 06
+
+### `Eq` instances: Write the `Eq` instances for the datatypes provided.
+
+[typeclasses.hs](/haskell-from-first-principles/test-files/typeclasses.hs)
