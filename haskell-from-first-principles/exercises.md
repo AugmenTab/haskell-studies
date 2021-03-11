@@ -2,6 +2,15 @@
 
 The following are my answers and solutions to the questions and problems posed in the chapter exercises.
 
+## Section Links:
+
+* [Chapter 01: All You Need is Lambda](#chapter-01)
+* [Chapter 02: Hello, Haskell!](#chapter-02)
+* [Chapter 03: Strings](#chapter-03)
+* [Chapter 04: Basic Datatypes](#chapter-04)
+* [Chapter 05: Types](#chapter-05)
+* [Chapter 06: Type Classes](#chapter-06)
+
 ## Chapter 01:
 
 ### Equivalence: We'll give you a lambda expression. Keeping in mind both alpha equivalence and how multiple heads are nested, choose an answer that is equivalent to the listed lambda term:
