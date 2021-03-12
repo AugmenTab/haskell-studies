@@ -721,3 +721,34 @@ munge = ???
 ### `Eq` instances: Write the `Eq` instances for the datatypes provided.
 
 [typeclasses.hs](/haskell-from-first-principles/test-files/typeclasses.hs)
+
+### Will they work?: Given the following code examples, decide if they will work, what result they will return if they do, and why (or why not) they work.
+
+1. `max (length [1, 2, 3]) (length [8, 9, 10, 11, 12])`
+   * This will work, because `length` returns in each case an `Int`, which has an instance of `Ord`. It will return 5, which is the value of `length [8, 9, 10, 11, 12]`.
+2. `compare (3 * 4) (3 * 5)`
+   * This will work, because the `*` operator returns in each case a `Num`, which has an instance of `Ord`. It will return LT, because `(3 * 4`) is less than `(3 * 5)`.
+3. `compare "Julie" True`
+   * This will not work, because although `"Julie"` and `True` both have an instance of `Ord`, they are not the same type.
+4. `(5 + 3) > (3 + 6)`
+   * This will work, because the `+` operator returns in each case a `Num`, which has an instance of `Ord`. It will return False, because `(5 + 3)` is not greater than `(3 + 6)`.
+
+### Multiple choice
+
+1. c
+2. b
+3. a
+4. c
+5. a
+
+### Does it type check? Examine the following code, and decide whether it will type check. If you can, fix the error.
+
+[typecheck.hs](/haskell-from-first-principles/test-files/typecheck.hs)
+
+1. No, because `Person` does not derive `Show`. It is fixed in the file.
+2. No, because there is no instance for `Eq` for Mood. I have added one in order to correct it for question 3.
+3.
+    1. `settleDown` can only accept a `Mood`, which has a value of either `Woot` or `Blah`.
+    2. It will not work, because none of the values of `Mood` are of any `Num` types.
+    3. It will not work, because there is no `Ord` in the `Mood` definition. I have fixed this in the file. Now that `Mood` derives `Ord`, it returns False, because `Blah` comes before `Woot` in the definition of `Mood`.
+4. Yes, this type checks.
