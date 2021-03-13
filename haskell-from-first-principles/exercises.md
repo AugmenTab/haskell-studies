@@ -752,3 +752,128 @@ munge = ???
     2. It will not work, because none of the values of `Mood` are of any `Num` types.
     3. It will not work, because there is no `Ord` in the `Mood` definition. I have fixed this in the file. Now that `Mood` derives `Ord`, it returns False, because `Blah` comes before `Woot` in the definition of `Mood`.
 4. Yes, this type checks.
+
+### Given a datatype declaration, what can we do?: Given the following datatype definitions, which of the following will type check? For those that don't, why don't they?
+
+```haskell
+data Rocks =
+  Rocks String deriving (Eq, Show)
+
+data Yeah =
+  Yeah Bool deriving (Eq, Show)
+
+data Papu =
+  Papu Rocks Yeah
+  deriving (Eq, Show)
+```
+
+```haskell
+-- 1
+phew = Papu "chases" True
+
+-- 2
+truth = Papu (Rocks "chomskydoz")
+             (Yeah True)
+
+-- 3
+equalityForAll :: Papu -> Papu -> Bool
+equalityForAll p p' = p == p'
+
+-- 4
+comparePapus :: Papu -> Papu -> Bool
+comparePapus p p' = p > p'
+```
+
+1. This will not type check. Papu expects an instance of Rocks and Yeah, but is instead receiving a String and a Bool.
+2. This will type check.
+3. This will type check.
+4. This will not type check; Papu does not derive `Ord`.
+
+### Match the types: Given two types, can you substitute the second type for the first?
+
+```haskell
+-- 1
+i :: Num a => a
+i = 1
+  
+-- 2, 3, 4
+f :: Float
+f = 1.0
+
+-- 5
+freud :: a -> a
+freud x = x
+
+-- 6
+freud' :: a -> a
+freud' x = x
+  
+-- 7
+myX = 1 :: Int
+
+sigmund :: Int -> Int
+sigmund x = myX
+
+-- 8
+myX = 1 :: Int
+
+sigmund' :: Int -> Int
+sigmund' x = myX
+
+-- 9
+jung :: Ord a => [a] -> a
+jung xs = head (sort xs)
+
+-- 10
+young :: [Char] -> Char
+young xs = head (sort xs)
+
+-- 11
+mySort :: [Char] -> Char
+mySort = sort
+
+signifier :: [Char] -> Char
+signifier xs = head (mySort xs)
+```
+
+1. `i :: a`
+   * No, this can't be substituted. It requires an instance of `Num`.
+2. `f :: Num a => a`
+   * No, this won't work. It requires some instance of `Fractional`.
+3. `f :: Fractional a => a`
+   * Yes, this will work.
+4. `f :: RealFrac a => a`
+   * Yes, this will work.
+5. `freud :: Ord a => a -> a`
+   * Yes, this will work.
+6. `freud' :: Int -> Int`
+   * Yes, this will work.
+7. `sigmund :: a -> a`
+   * No, this will not work. It requires an instance of `Num`.
+8. `sigmund' :: Num a => a -> a`
+   * No, this will not work. `myX` is already of type Int, so `sigmund'` cannot be made more polymorphic.
+9. `jung :: [Int] -> Int`
+   * Yes, this will work.
+10. `young :: Ord a => [a] -> a`
+    * Yes, this will work.
+11. `signifier :: Ord a => [a] -> a`
+    * No, this will not work. `mySort` is already of type `[Char] -> Char`, so `signifier` cannot be made more polymorphic.
+
+### Type-Kwon-Do Two: Electric typealoo: Fill in the `???` with code that will fit the types.
+
+```haskell
+-- 1
+chk :: Eq b => (a -> b) -> a -> b -> Bool
+chk = ???
+
+-- 2
+arith :: Num b
+         => (a -> b)
+         -> Integer
+         -> a
+         -> b
+arith = ???         
+```
+
+1. `chk f x y = f x == y`
+2. `arith f x y = (f y) + (fromIntegral x)`
