@@ -11,3 +11,4 @@ The following are my answers and solutions to the questions and problems posed i
 * [Chapter 05: Types](chapter05.md)
 * [Chapter 06: Type Classes](chapter06.md)
 * [Chapter 07: More Functional Patterns](chapter07.md)
+* [Chapter 08: Recursion](chapter08.md)
