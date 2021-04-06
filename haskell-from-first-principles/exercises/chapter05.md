@@ -1,4 +1,4 @@
-# Chapter 05:
+# Chapter 05: Types
 
 ### Type matching: Match the function to its type signature.
 

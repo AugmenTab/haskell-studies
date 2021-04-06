@@ -1,4 +1,4 @@
-# Chapter 02:
+# Chapter 02: Hello, Haskell!
 
 ### Heal the sick: The following code samples are broken and won't compile. The first two are as you might enter them into the REPL. The third is from a source file. Find the mistakes, and fix them so that the code will compile:
 

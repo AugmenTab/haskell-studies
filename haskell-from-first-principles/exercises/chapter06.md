@@ -1,4 +1,4 @@
-# Chapter 06
+# Chapter 06: Type Classes
 
 ### `Eq` instances: Write the `Eq` instances for the datatypes provided.
 

@@ -1,4 +1,4 @@
-# Chapter 04:
+# Chapter 04: Basic Datatypes
 
 ### Mood swing: Given this datatype, answer the following questions:
 

@@ -1,4 +1,4 @@
-# Chapter 01:
+# Chapter 01: All You Need is Lambda
 
 ### Equivalence: We'll give you a lambda expression. Keeping in mind both alpha equivalence and how multiple heads are nested, choose an answer that is equivalent to the listed lambda term:
 

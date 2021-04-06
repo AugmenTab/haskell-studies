@@ -1,4 +1,4 @@
-# Chapter 03:
+# Chapter 03: Strings
 
 ### Syntax errors: Read the syntax of the following functions, and decide whether it will compile:
 

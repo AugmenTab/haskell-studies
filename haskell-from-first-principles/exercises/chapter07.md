@@ -1,4 +1,4 @@
-# Chapter 07:
+# Chapter 07: More Functional Patterns
 
 ### Grab bag
 

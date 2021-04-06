@@ -1,4 +1,4 @@
-# Chapter 08:
+# Chapter 08: Recursion
 
 ### Intermission: Write out the evalutation
 
