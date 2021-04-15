@@ -2,7 +2,7 @@
 
 ### EnumFromTo: Write your own definitions for the types provided.
 
-The solution for this one was taken from GitHub user [nackjicholson](https://github.com/nackjicholson/haskellbook-solutions/blob/master/chapter9/exercises.hs). I had to go looking for guidance on this one for the same reason they specified: the authors of the book want the reader to do this exercises without using range syntax, which is really the only topic this chapter has covered thus far.
+The solution for this one was taken from GitHub user [nackjicholson](https://github.com/nackjicholson/haskellbook-solutions/blob/master/chapter9/exercises.hs). I had to go looking for guidance on this one for the same reason they specified: the authors of the book want the reader to do this exercise without using range syntax, which is really the only topic this chapter has covered thus far.
 
 ```haskell
 eftBool :: Bool -> Bool -> [Bool]
@@ -111,3 +111,125 @@ myCube = [y^3 | y <- [1..5]]
 3. Apply another function to that list comprehension to determine how many tuples inhabit your output list.
    * `length [(x, y) | x <- mySqr, y <- myCube, x < 50, y < 50]`
 
+### Bottom madness: Will the following expressions return a value or be &bot;?
+
+1. `[x^y | x <- [1..5], y <- [2, undefined]]`
+   * &bot;
+2. `take 1 $ [x^y | x <- [1..5], y <- [2, undefined]]`
+   * `[1]`
+3. `sum [1, 2, undefined]`
+   * &bot;
+4. `length [1, 2, undefined]`
+   * 3
+5. `length $ [1, 2, 3] ++ undefined`
+   * &bot;
+6. `take 1 $ filter even [1, 2, 3, undefined]`
+   * `[2]`
+7. `take 1 $ filter even [1, 3, undefined]`
+   * &bot;
+8. `take 1 $ filter odd [1, 3, undefined]`
+   * `[1]`
+9. `take 2 $ filter odd [1, 3, undefined]`
+   * ` [1, 3]`
+10. `take 3 $ filter odd [1, 3, undefined]`
+    * &bot;
+
+### Is it normal form?: For each expression below, determine whether it is normal form, weak head normal form, or neither.
+
+1. `[1, 2, 3, 4, 5]`
+   * Normal Form
+2. `1 : 2 : 3 : 4 : _`
+   * Weak Head Normal Form
+3. `enumFromTo 1 10`
+   * Neither
+4. `length [1, 2, 3, 4, 5]`
+   * Normal Form
+5. `sum (enumFromTo 1 10)`
+   * Normal Form
+6. `['a'..'m'] ++ ['n'..'z']`
+   * Neither
+7. `(_, 'b')`
+   * Weak Head Normal Form
+
+### More bottoms
+
+1. Will `take 1 $ map (+1) [undefined, 2, 3]` return a value or be &bot;?
+   * &bot;
+2. Will `take 1 $ map (+1) [1, undefined, 3]` return a value?
+   * `[2]`
+3. Will `take 1 $ map (+1) [1, 2, undefined]` return a value?
+   * `[2]`
+4. What does the function `itIsMystery xs = map (\x -> elem x "aeiou") xs` do? What is its type?
+    * It creates a list of booleans reflecting whether each element in the list argument is a vowel.
+    * itIsMystery :: [Char] -> [Bool]
+5. What will be the result of the following functions?
+    1. `map (^2) [1..10]`
+       * `[1, 4, 9, 16, 25, 36, 49, 64, 81, 100]`
+    2. `map minimum [[1..10], [10..20], [20..30]]`
+       * `[1, 10, 20]`
+    3. `map sum [[1..5], [1..5], [1..5]]`
+       * `[15, 15, 15]`
+6. Rewrite `map (\x -> if x == 3 then (-x) else (x)) [1..10]` using `Data.Bool (bool)`.
+   * `map (\x -> bool x (-x) (x == 3)) [1..10]`
+
+### Filtering
+
+1. How might we write a filter function that would give us all the multiples of 3 out of a list from 1-30?
+    * `filter (\x -> rem x 3 == 0) [1..30]`
+    * `[x | x <- [1..30], rem x 3 == 0]`
+2. How could we compose the above function(s) with the `length` function to tell us *how many* multiples of 3 there are between 1 and 30?
+    * `length $ filter (\x -> rem x 3 == 0) [1..30]`
+    * `length $ [x | x <- [1..30], rem x 3 == 0]`
+3. Write a function that removes all articles ("the", "a", and "an") from sentences.
+    * `stripArticles xs = filter (\x -> not (elem x ["the", "a", "an"])) (words xs)`
+    * `stripArticles xs = [x | x <- words xs, not $ elem x ["the", "a", "an"]]`
+
+### Zipping
+
+```haskell
+-- 1: Write your own version of zip, and ensure it behaves the same as the original.
+myZip :: [a] -> [b] -> [(a, b)]
+myZip []     _      = []
+myZip _      []     = []
+myZip (x:xs) (y:ys) = (x, y) : myZip xs ys
+
+-- 2: Do the same for zipWith.
+myZipWith :: (a -> b -> c) -> [a] -> [b] -> [c]
+myZipWith _ []     _      = []
+myZipWith _ _      []     = []
+myZipWith f (x:xs) (y:ys) = f x y : myZipWith f xs ys
+
+-- 3: Rewrite zip in terms of the zipWith you wrote.
+zipAgain :: [a] -> [b] -> [(a, b)]
+zipAgain = myZipWith (\x y -> (x, y))
+```
+
+### Data.Char
+
+1. Query the types of `isUpper` and `toUpper`.
+    * `isUpper :: Char -> Bool`
+    * `toUpper :: Char -> Char`
+2. Write a function that filters all the uppercase letters out of a `String`.
+    * `removeUpper = filter isUpper`
+    * The examples given in the book imply that the above is correct (`"HbEfLrLxO" => "HELLO"`), but the description given should mean we filter out the uppercase, leaving only lowercase letters as the result. That version would be: `removeUpper xs = [x | xs, not (isUpper x)]`.
+3. Write a function that will capitalize the first letter of a string and return the entire string.
+   * `capitalize (x:xs) = toUpper x : xs`
+4. Make a new version of the above function that is recursive, and capitalizes every letter in a string.
+    * See below.
+    * Alternate: `capitalizeAll = map toUpper`
+5. Write a function that will capitalize the first letter of a `String` and return only that letter as a result.
+   * `getCapital x = toUpper (head x)`
+6. Rewrite the above as a composed function and as a point-free function.
+    * `getCapital x = toUpper $ head x`
+    * `getCapital = toUpper . head`
+
+```haskell
+-- 4
+capitalizeAll :: [Char] -> [Char]
+capitalizeAll ""     = ""
+capitalizeAll (x:xs) = toUpper x : capitalizeAll xs
+```
+
+### Ciphers
+
+[Cipher.hs](../test-files/Cipher.hs)
