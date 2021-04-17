@@ -230,6 +230,8 @@ capitalizeAll ""     = ""
 capitalizeAll (x:xs) = toUpper x : capitalizeAll xs
 ```
 
-### Ciphers
+### Ciphers: Write a Caesar cipher.
 
 [Cipher.hs](../test-files/Cipher.hs)
+
+### 
