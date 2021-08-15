@@ -4,7 +4,7 @@ A repository for projects and experiments while learning Haskell.
 
 ## Learn You a Haskell for Great Good!
 
-This directory includes the exercises, projects, and example files made as a result of following along with the Miran Lipova&#268;a book.
+This directory includes the exercises, projects, and example files made as a result of following along with the Miran Lipova&#269;a book.
 
 ## Haskell Programming from First Principles
 
