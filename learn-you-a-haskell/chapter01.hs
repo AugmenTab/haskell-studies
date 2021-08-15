@@ -22,7 +22,7 @@ conanO'Brien :: [Char]
 conanO'Brien = "It's a-me, Conan O'Brien!"
 
 
-boomBangs :: Integral a => [a] -> [[Char]]
+boomBangs :: Integral a => [a] -> [String]
 boomBangs xs = [if x < 10 then "BOOM!" else "BANG!" | x <- xs, odd x]
 
 
@@ -30,5 +30,5 @@ length' :: Integral a => [*] -> a
 length' xs = sum [1 | _ <- xs]
 
 
-removeNonUppercase :: [Char] -> [Char]
+removeNonUppercase :: String -> String
 removeNonUppercase st = [c | c <- st, elem c ['A'..'Z']]
