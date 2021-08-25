@@ -1,8 +1,8 @@
 -- todo
 import Control.Exception
 import Data.List
-import System.Environment
 import System.Directory
+import System.Environment
 import System.IO
 
 
@@ -29,8 +29,7 @@ bump :: [String] -> IO ()
 bump [fileName, numberString] = do
     contents <- readFile fileName
     let todoTasks    = lines contents
-        number       = read numberString :: Int
-        taskToMove   = todoTasks !! number
+        taskToMove   = todoTasks !! (read numberString :: Int)
         newTodoItems = unlines $ taskToMove : (delete (taskToMove) todoTasks)
     commit fileName newTodoItems
 bump _                        = putStrLn $ errorMessage 2
@@ -80,6 +79,7 @@ view [fileName] = do
     let todoTasks     = lines contents
         numberedTasks = zipWith (\n line -> show n ++ " - " ++ line)
                                 [0..] todoTasks
+    putStrLn "\nThese are your TO-DO items:"
     putStrLn $ unlines numberedTasks
 view _          = putStrLn $ errorMessage 1
 
