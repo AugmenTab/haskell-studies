@@ -14,7 +14,7 @@ main = do
 
 dispatch :: String -> [String] -> IO ()
 dispatch "add"    = add
--- TODO dispatch "bump"   = bump
+dispatch "bump"   = bump
 dispatch "view"   = view
 dispatch "remove" = remove
 dispatch command  = doesntExist command
@@ -23,6 +23,30 @@ dispatch command  = doesntExist command
 add :: [String] -> IO ()
 add [fileName, todoItem] = appendFile fileName (todoItem ++ "\n")
 add _                    = putStrLn $ errorMessage 2
+
+
+bump :: [String] -> IO ()
+bump [fileName, numberString] = do
+    contents <- readFile fileName
+    let todoTasks    = lines contents
+        number       = read numberString :: Int
+        taskToMove   = todoTasks !! number
+        newTodoItems = unlines $ taskToMove : (delete (taskToMove) todoTasks)
+    commit fileName newTodoItems
+bump _                        = putStrLn $ errorMessage 2
+
+
+commit :: FilePath -> String -> IO ()
+commit fileName content =
+    bracketOnError (openTempFile "./io-files/" "temp")
+        (\(tempName, tempHandle) -> do
+            hClose tempHandle
+            removeFile tempName)
+        (\(tempName, tempHandle) -> do
+            hPutStr tempHandle content
+            hClose tempHandle
+            removeFile fileName
+            renameFile tempName fileName)
 
 
 doesntExist :: String -> [String] -> IO ()
@@ -46,15 +70,7 @@ remove [fileName, numberString] = do
                                 [0..] todoTasks
     let number = read numberString :: Int
         newTodoItems = unlines $ delete (todoTasks !! number) todoTasks
-    bracketOnError (openTempFile "./io-files/" "temp")
-        (\(tempName, tempHandle) -> do
-            hClose tempHandle
-            removeFile tempName)
-        (\(tempName, tempHandle) -> do
-            hPutStr tempHandle newTodoItems
-            hClose tempHandle
-            removeFile fileName
-            renameFile tempName fileName)
+    commit fileName newTodoItems
 remove _                        = putStrLn $ errorMessage 2
 
 
