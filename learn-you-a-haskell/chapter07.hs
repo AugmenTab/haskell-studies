@@ -1,4 +1,4 @@
--- chapter07; see Shapes module as well.
+-- chapter07: Making Our Own Types and Type Classes; see Shapes module as well.
 module Chapter07 where
 
 import qualified Data.Map as Map
@@ -12,33 +12,26 @@ data Person = Person { firstName   :: String
                      , flavor      :: String
                      } deriving (Eq, Ord, Read, Show)
 
-
 data Car = Car { company :: String
                , model   :: String
                , year    :: Int
                } deriving (Show)
 
-
 data Vector a = Vector a a a deriving (Show)
-
 
 data Day = Monday | Tuesday | Wednesday | Thursday | Friday | Saturday | Sunday
            deriving (Bounded, Enum, Eq, Ord, Read, Show)
 
-
 data LockerState = Taken | Free deriving (Eq, Show)
-
 
 infixr 5 :-:
 data List a = Empty | a :-: (List a) deriving (Eq, Ord, Read, Show)
-
 
 data Tree a = EmptyTree | Node a (Tree a) (Tree a) deriving (Show)
 
 instance Functor Tree where
     fmap f EmptyTree           = EmptyTree
     fmap f (Node x left right) = Node (f x) (fmap f left) (fmap f right)
-
 
 data TrafficLight = Red | Yellow | Green
 
@@ -52,7 +45,6 @@ instance Show TrafficLight where
     show Red    = "Red Light"
     show Yellow = "Yellow Light"
     show Green  = "Green Light"
-
 
 class YesNo a where
     yesno :: a -> Bool
@@ -95,18 +87,14 @@ tellCar :: Car -> String
 tellCar (Car {company = c, model = m, year = y}) =
     "This " ++ c ++ " " ++ m ++ " was made in " ++ show y ++ "."
 
-
 vplus :: (Num a) => Vector a -> Vector a -> Vector a
 vplus (Vector i j k) (Vector l m n) = Vector (i + l) (j + m) (k + n)
-
 
 dotProd :: (Num a) => Vector a -> Vector a -> a
 dotProd (Vector i j k) (Vector l m n) = i * l + j * m + k * n
 
-
 vmult :: (Num a) => Vector a -> a -> Vector a
 vmult (Vector i j k) m = Vector (i * m) (j * m) (k * m)
-
 
 mikeD  = Person { firstName   = "Michael"
                 , lastName    = "Diamond"
@@ -132,7 +120,6 @@ mca    = Person { firstName   = "Adam"
                 , flavor      = "Butterscotch"
                 }
 
-
 phoneBook :: PhoneBook
 phoneBook =
     [ ("betty",   "555-2938")
@@ -147,10 +134,8 @@ phoneBook =
     , ("penny",   "555-2111")
     ]
 
-
 inPhoneBook :: Name -> PhoneNumber -> PhoneBook -> Bool
 inPhoneBook name pnumber pbook = elem (name, pnumber) pbook
-
 
 lockerLookup :: Int -> LockerMap -> Either String Code
 lockerLookup lockerNumber map = case Map.lookup lockerNumber map of
@@ -159,7 +144,6 @@ lockerLookup lockerNumber map = case Map.lookup lockerNumber map of
         if state /= Taken then Right code
                           else Left $ "Locker " ++ show lockerNumber
                                                 ++ " is already taken!"
-
 
 lockers :: LockerMap
 lockers = Map.fromList
@@ -171,16 +155,13 @@ lockers = Map.fromList
     , (110, (Taken, "99292"))
     ]
 
-
 infixr 5 ^++
 (^++) :: List a -> List a -> List a
 Empty      ^++ ys = ys
 (x :-: xs) ^++ ys = x :-: (xs ^++ ys)
 
-
 singleton :: a -> Tree a
 singleton x = Node x EmptyTree EmptyTree
-
 
 treeInsert :: (Ord a) => a -> Tree a -> Tree a
 treeInsert x EmptyTree           = singleton x
@@ -189,14 +170,12 @@ treeInsert x (Node a left right)
     | x <  a = Node a (treeInsert x left) right
     | x >  a = Node a left (treeInsert x right)
 
-
 treeElem :: (Ord a) => a -> Tree a -> Bool
 treeElem x EmptyTree           = False
 treeElem x (Node a left right)
     | x == a = True
     | x <  a = treeElem x left
     | x >  a = treeElem x right
-
 
 yesnoIf :: (YesNo y) => y -> a -> a -> a
 yesnoIf yesnoVal yesResult noResult = 

@@ -1,4 +1,4 @@
--- chapter10
+-- chapter10: Functionally Solving Problems
 module Chapter10 where
 
 import Data.List
@@ -13,6 +13,7 @@ data Section = Section
     , getB :: Int
     , getC :: Int 
     } deriving (Show)
+
 
 type Path = [(Label, Int)]
 type RoadSystem = [Section]

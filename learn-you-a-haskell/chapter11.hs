@@ -1,4 +1,4 @@
--- chapter11
+-- chapter11: Applicative Functors
 module Chapter11 where
 
 import Control.Applicative (liftA2)

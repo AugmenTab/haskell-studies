@@ -1,8 +1,9 @@
--- chapter08
+-- chapter08: Input and Output
 module Chapter08 where
 
 import Control.Monad
 -- import Data.Char
+
 
 {-
 main :: IO ()
@@ -11,7 +12,6 @@ main = do
     name <- getLine
     putStrLn $ "Hey " ++ name ++ ", you rock!"    
 -}
-
 
 {-
 main :: IO ()
@@ -27,7 +27,6 @@ main = do
                       ++ ", how are you?"
 -}
 
-
 {-
 main :: IO ()
 main = do
@@ -35,7 +34,6 @@ main = do
     when (input == "SWORDFISH") $ do
         putStrLn input
 -}
-
 
 {-
 main :: IO ()
@@ -45,7 +43,6 @@ main = do
     mapM_ print rs
 -}
 
-
 {-
 main :: IO ()
 main = forever $ do
@@ -53,7 +50,6 @@ main = forever $ do
     l <- getLine
     putStrLn $ map toUpper l
 -}
-
 
 main :: IO [()]
 main = do
