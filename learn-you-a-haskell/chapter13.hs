@@ -1,5 +1,5 @@
 -- chapter13: A Fistful of Monads
-module Chapter13 (KnightPos, moveKnight) where
+module Chapter13 (KnightPos, moveKnight, (-:)) where
 
 import Control.Monad (guard)
 
