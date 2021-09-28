@@ -35,3 +35,52 @@
     9. `foldl (flip const) 'z' [1..5]`
         * Same reason as #8. `foldr (flip const) 'z' [1..5]`
         * And we can stop flipping, too: `foldl const 'z' [1..5]`
+
+
+### Database processing
+
+```haskell
+import qualified Data.Time as T
+
+data DatabaseItem
+    = DbString String
+    | DbNumber Integer
+    | DbDate   T.UTCTime
+    deriving (Eq, Ord, Show)
+
+theDatabase :: [DatabaseItem]
+theDatabase =
+    [ DbDate (T.UTCTime (T.fromGregorian 1911 5 1) (T.secondsToDiffTime 34123))
+    , DbNumber 9001
+    , DbString "Hello, world!"
+    , DbDate (T.UTCTime (T.fromGregorian 1921 5 1) (T.secondsToDiffTime 34123))
+    ]
+
+{- 1. Write a function that filters for DbDate values and returns a list of the
+UTCTime values inside them. -}
+filterDbDate :: [DatabaseItem] -> [T.UTCTime]
+filterDbDate = foldr times []
+  where times (DbDate t) acc = t : acc
+        times _          acc = acc
+
+{- 2. Write a function that filters for DbNumber values and returns a list of
+the Integer values inside them. -}
+filterDbNumber :: [DatabaseItem] -> [Integer]
+filterDbNumber = foldr nums []
+  where nums (DbNumber n) ns = n : ns
+        nums _            ns = ns
+
+-- 3. Write a function that gets the most recent date.
+mostRecent :: [DatabaseItem] -> T.UTCTime
+mostRecent = maximum . filterDbDate
+
+-- 4. Write a function that sums all of the DbNumber values.
+sumDb :: [DatabaseItem] -> Integer
+sumDb = sum . filterDbNumber
+
+-- 5. Write a function that gets the average of the DbNumber values.
+avgDb :: [DatabaseItem] -> Double
+avgDb xs = if len > 0 then summed / len else 0
+  where summed = fromIntegral $ sumDb xs
+        len    = fromIntegral $ length $ filterDbNumber xs
+```
