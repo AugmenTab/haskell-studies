@@ -84,3 +84,117 @@ avgDb xs = if len > 0 then summed / len else 0
   where summed = fromIntegral $ sumDb xs
         len    = fromIntegral $ length $ filterDbNumber xs
 ```
+
+### Scans exercises
+
+```haskell
+fibs    = 1 : scanl (+) 1 fibs
+fibsN x = fibs !! x
+```
+
+1. Modify your `fibs` function to only return the first 20 Fibonacci numbers.
+    * `fibs = take 20 $ 1 : scanl (+) 1 fibs`
+2. Modify `fibs` to return the Fibonacci numbers that are less than 100.
+    * `fibs = takeWhile (< 100) $ 1 : scanl (+) 1 fibs`
+3. Try to write the `factorial` function from Chapter 8 as a scan. You'll want `scanl` again, and your start value will be 1.
+    * `factorial = (!!) (scanl (*) 1 [1..])`
+
+### Warm-up and review
+
+```haskell
+{- 1. Given the following set of consonants and vowels: 
+
+    stops  = "pbtdkg"
+    vowels = "aeiou"
+
+    a. Write a function that takes inputs from stops and vowels and makes
+    3-tuples of all possible stop-vowel-stop combinations. These will not all
+    correspond to real words in English, although the stop-vowel-stop pattern is
+    common enough that many of them will.
+
+    b. Modify that function so that it only returns the combinations that begin
+    with a p.
+
+    c. Now set up lists of nouns and verbs (instead of stops and vowels), and
+    modify the function to make tuples representing possible noun-verb-noun
+    sentences.
+-}
+svsWords :: [(Char, Char, Char)]
+svsWords stops vowels = [ (x, y, z) | x <- stops, y <- vowels, z <- stops ]
+
+svsWordsApp :: [(Char, Char, Char)]
+svsWordsApp stops vowels = (,,) <$> stops <*> vowels <*> stops
+
+svsWordsOnlyP :: [(Char, Char, Char)]
+svsWordsOnlyP stops vowels = [ ('p', y, z) | y <- vowels, z <- stops ]
+
+svsWordsOnlyPApp :: [(Char, Char, Char)]
+svsWordsOnlyPApp stops vowels = (,,) <$> "p" <*> vowels <*> stops
+
+nvnSentences :: [("String", "String", "String")]
+nvnSentences nouns verbs = [ (x, y, z) | x <- nouns, y <- verbs, z <- nouns ]
+
+nvnSentencesApp :: [("String", "String", "String")]
+nvnSentencesApp nouns verbs = (,,) <$> nouns <*> verbs <$> nouns
+
+-- 2. What does the following mystery function do? What is its type?
+seekritFunc :: String -> Int
+seekritFunc x = div (sum (map length (words x))) (length (words x))
+
+{- It finds the average word length in a given String. 
+    (sum (map length (words x))) gets the total number of characters.
+    (length (words x)) gets the number of words.
+    div then divides the number of characters by the number of words.
+-}
+
+-- 3. Rewrite seekritFunc to use fractional division.
+seekritFuncFrac :: String -> Double
+seekritFuncFrac x = numChars / numWords
+  where numChars = fromIntegral (sum (map length (words x)))
+        numWords = fromIntegral (length (words x))
+```
+
+### Rewriting functions using folds
+
+```haskell
+myOr :: [Bool] -> Bool
+myOr = foldr (||) False
+
+myAny :: (a -> Bool) -> [a] -> Bool
+myAny f = foldr ((||) . f) False
+
+myElem :: Eq a => a -> [a] -> Bool
+myElem e = foldr ((||) . (== e)) False
+
+myElem' :: Eq a => a -> [a] -> Bool
+myElem' e = any (== e)
+
+myReverse :: [a] -> [a]
+myReverse = foldr (\x acc -> acc ++ [x]) []
+
+myReverse' :: [a] -> [a]
+myReverse' = foldl (flip (:)) []
+
+myMap :: (a -> b) -> [a] -> [b]
+myMap f = foldr (\x acc -> f x : acc) []
+
+myFilter :: (a -> Bool) -> [a] -> [a]
+myFilter f = foldr (\x acc -> if f x then x : acc else acc) []
+
+squish :: [[a]] -> [a]
+squish = foldr (++) []
+
+squishMap :: (a -> [b]) -> [a] -> [b]
+squishMap f = foldr ((++) . f) []
+
+squishAgain :: [[a]] -> [a]
+squishAgain = squishMap id
+
+myMaximumBy :: (a -> a -> Ordering) -> [a] -> a
+myMaximumBy _ []     = undefined
+myMaximumBy f (x:xs) = foldl (\x acc -> if f x acc == GT then x else acc) x xs
+
+myMinimumBy :: (a -> a -> Ordering) -> [a] -> a
+myMinimumBy _ []     = undefined
+myMinimumBy f (x:xs) = foldl (\x acc -> if f x acc == LT then x else acc) x xs
+```
