@@ -180,3 +180,44 @@ data GardenNormal
     | Lilac    String
     deriving Show
 ```
+
+### Programmers
+
+```haskell
+data OperatingSystem
+    = GnuPlusLinux
+    | OpenBSD
+    | Mac
+    | Windows
+    deriving (Eq, Show)
+
+data ProgLang
+    = Haskell
+    | Agda
+    | Idris
+    | PureScript
+    deriving (Eq, Show)
+
+data Programmer =
+    Programmer { os   :: OperatingSystem
+               , lang :: ProgLang
+               }
+    deriving (Eq, Show)
+
+allOperatingSystems :: [OperatingSystem]
+allOperatingSystems =
+    [ GnuPlusLinux
+    , OpenBSD
+    , Mac
+    , Windows
+    ]
+
+allLanguages :: [ProgLang]
+allLanguages = [Haskell, Agda, Idris, PureScript]
+
+{- 1. Write a function that generates all possible values of Programmer. Use the
+provided lists of inhabitants of OperatingSystem and ProgLang. -}
+allProgrammers :: [Programmer]
+allProgrammers = makeProgrammer <$> allOperatingSystems <*> allLanguages
+  where makeProgrammer o l = Programmer { os = o, lang = l }
+```
