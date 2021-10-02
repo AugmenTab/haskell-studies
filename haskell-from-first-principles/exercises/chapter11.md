@@ -102,3 +102,81 @@ data Example = MakeExample deriving Show
 1. `MakeExample :: Example`. You can't request the type of `Example` because it is a type constructor.
 2. When using `:info` on `Example`, you can see the type class instance of `MyExample`.
 3. You get `MakeExample :: Int -> Example`, since it has now become a function that constructs an `Example`.
+
+### Logic goats
+
+```haskell
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
+class TooMany a where
+    tooMany :: a -> Bool
+
+instance TooMany Int where
+    tooMany n = n > 42
+
+newtype Goats = Goats Int deriving (Eq, Show, TooMany)
+
+{- 1. Reusing the TooMany type class, write an instance of the type class for
+the type (Int, String). -}
+instance TooMany (Int, String) where
+    tooMany (n, _) = tooMany n
+
+{- 2. Make another TooMany instance for (Int, Int). Sum the values together
+under the assumption that this is a count of goats from two fields. -}
+instance TooMany (Int, Int) where
+    tooMany (x, y) = tooMany (x + y)
+
+{- 3. Make another TooMany instance, this time for (Num a, TooMany a) => (a, a).
+This can mean whatever you want, such as summing the two numbers together. -}
+instance (Num a, TooMany a) => TooMany (a, a) where
+    tooMany (x, y) = tooMany (x + y)
+```
+
+### Pity the Bool
+
+```haskell
+-- 1. What is the cardinality of the below datatype?
+data BigSmall
+    = Big   Bool
+    | Small Bool
+    deriving (Eq, Show)
+
+{- 2. What is the cardinality of NumberOrBool below? What happens if you try to
+create a Numba with a numeric literal larger than 127? And with a numeric
+literal smaller than -128? -}
+import Data.Int
+
+data NumberOrBool
+    = Numba     Int8
+    | BoolyBool Bool
+    deriving (Eq, Show)
+
+myNumba = Numba (-128)
+```
+
+1. `BigSmall` has a cardinality of 4. `Bool` has a cardinality of 2, so both `Big` and `Small` would each have a cardinality of 2. Add them together to get 4.
+2. `NumberOrBool` has a cardinality of 258. `Numba` has the same cardinality as `Int8`, which is 256. `BoolyBool` has the same cardinality as `Bool`, which is 2. Added together, we get 258. If we try to create a Numba with a numeric literal larger than 127 or smaller than -128, we get a warning that it is out of the range of `Int8`.
+
+### How does your garden grow?
+
+```haskell
+data FlowerType
+    = Gardenia
+    | Daisy
+    | Rose
+    | Lilac
+    deriving Show
+
+type Gardener = String
+
+data Garden = Garden Gardener FlowerType deriving Show
+
+-- 1. What is the sum of products normal form of Garden?
+data GardenNormal
+    = Gardenia String
+    | Daisy    String
+    | Rose     String
+    | Lilac    String
+    deriving Show
+```
