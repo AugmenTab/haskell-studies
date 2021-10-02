@@ -84,3 +84,21 @@ getManu' v = case v of
 argument to the Plane constructor. Add that to your datatypes in the appropriate
 places, and change your data and functions appropriately. -}
 ```
+
+### Cardinality
+
+1. 1
+2. 3
+3. 65,536
+4. The cardinality of `Int` is 18,446,744,073,709,551,616. This could also be interpreted as `1 + (maxBound :: Word)`, since `Word` has the same cardinality as the `Int` type, but only contains positive integers. `Integer` values are unbounded.
+5. `Int8` is an 8-bit integer, so it stores 2^8 (256) possible values.
+
+### For example
+
+```haskell
+data Example = MakeExample deriving Show
+```
+
+1. `MakeExample :: Example`. You can't request the type of `Example` because it is a type constructor.
+2. When using `:info` on `Example`, you can see the type class instance of `MyExample`.
+3. You get `MakeExample :: Int -> Example`, since it has now become a function that constructs an `Example`.
