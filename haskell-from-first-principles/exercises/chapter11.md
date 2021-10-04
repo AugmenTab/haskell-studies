@@ -259,3 +259,40 @@ fTwo :: Bool -> Quad -> Quad
 4. 2 * 2 * 2 = 8
 5. 2 ^ 2 ^ 2 = 16
 6. (2 ^ 4 = 16) ^ 4 = 65,536
+
+### Trees
+
+```haskell
+data BinaryTree a
+    = Leaf
+    | Node (BinaryTree a) a (BinaryTree a)
+    deriving (Eq, Ord, Show)
+
+-- 1. Write map for BinaryTree.
+mapTree :: (a -> b) -> BinaryTree a -> BinaryTree b
+mapTree _ Leaf = Leaf
+mapTree f (Node left a right) =
+    Node (mapTree f left) (f a) (mapTree f right)
+
+-- 2. Write functions to convert BinaryTree values to lists.
+preorder :: BinaryTree a -> [a]
+preorder Leaf = []
+preorder (Node left a right) =
+    [a] ++ preorder left ++ preorder right
+
+inorder :: BinaryTree a -> [a]
+inorder Leaf = []
+inorder (Node left a right) =
+    inorder left ++ [a] ++ inorder right
+
+postorder :: BinaryTree a -> [a]
+postorder Leaf = []
+postorder (Node left a right) =
+    postorder left ++ postorder right ++ [a]
+
+-- 3. Write foldr for BinaryTree.
+foldTree :: (a -> b -> b) -> b -> BinaryTree a -> b
+foldTree _ acc Leaf = acc
+foldTree f acc (Node left val right) =
+    foldTree f (f val (foldTree f acc right)) left
+```
