@@ -221,3 +221,39 @@ allProgrammers :: [Programmer]
 allProgrammers = makeProgrammer <$> allOperatingSystems <*> allLanguages
   where makeProgrammer o l = Programmer { os = o, lang = l }
 ```
+
+### The Quad
+
+Determine how many unique inhabitants each type has.
+
+```haskell
+-- 1
+data Quad
+    = One
+    | Two
+    | Three
+    | Four
+    deriving (Eq, Show)
+
+-- 2
+prodQuad :: (Quad, Quad)
+
+-- 3
+funcQuad :: Quad -> Quad
+
+-- 4
+prodTBool :: (Bool, Bool, Bool)
+
+-- 5
+gTwo :: Bool -> Bool -> Bool
+
+-- 6
+fTwo :: Bool -> Quad -> Quad
+```
+
+1. 1 + 1 + 1 + 1 = 4
+2. 4 * 4 = 16
+3. 4 ^ 4 = 256
+4. 2 * 2 * 2 = 8
+5. 2 ^ 2 ^ 2 = 16
+6. (2 ^ 4 = 16) ^ 4 = 65,536
