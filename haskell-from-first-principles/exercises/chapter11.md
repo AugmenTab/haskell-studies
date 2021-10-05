@@ -296,3 +296,90 @@ foldTree _ acc Leaf = acc
 foldTree f acc (Node left val right) =
     foldTree f (f val (foldTree f acc right)) left
 ```
+
+### Multiple choice
+
+```haskell
+data Weekday
+    = Monday
+    | Tuesday
+    | Wednesday
+    | Thursday
+    | Friday
+
+f Friday = "Miller Time"
+```
+
+1. a
+2. c
+3. b
+4. c
+
+### Ciphers
+
+```haskell
+-- TODO
+```
+
+### As-patterns
+
+```haskell
+import Data.Char (toUpper)
+import Data.List (words)
+
+{- 1. This should return True if (and only if) all the values in the first list
+appear in the second list, though they need not be contiguous. -}
+isSubseqOf :: (Eq a) => [a] -> [a] -> Bool
+isSubseqOf []       _ = True
+isSubseqOf a@(x:xs) b
+    | elem x b  = isSubseqOf xs b
+    | otherwise = False
+
+{- 2. Split a sentence into words, then tuple each one with its capitalized
+form. -}
+capitalizeWords :: String -> [(String, String)]
+capitalizeWords = map (\str@(x:xs) -> (str, toUpper x : xs)) . words
+```
+
+### Language exercises
+
+```haskell
+import Data.Char (toUpper)
+
+-- 1. Write a function that capitalizes a word.
+capitalizeWord :: String -> String
+capitalizeWord (x:xs) = toUpper x : xs
+
+{- 2. Write a function that capitalizes sentences in a paragraph. Recognize when a new sentence has begun by checking for periods. Reuse the capitalizeWord
+function. -}
+capitalizeParagraph :: String -> String
+capitalizeParagraph (x:xs)= checkStart $ words $ toUpper x : xs
+  where checkStart (x:[])   = x
+        checkStart (x:y:xs)
+            | elem '.' x = x ++ " " ++ checkStart (capitalizeWord y : xs)
+            | otherwise  = x ++ " " ++ checkStart (y : xs)
+```
+
+### Phone exercise
+
+```haskell
+-- TODO
+```
+
+### Hutton's Razor
+
+```haskell
+data Expr
+    = Lit Integer
+    | Add Expr Expr
+
+-- 1. Write the eval function, that reduces an expression to a final sum.
+eval :: Expr -> Integer
+eval (Lit i)   = i
+eval (Add x y) = eval x + eval y
+
+-- 2: Write a printer for the expressions.
+printExpr :: Expr -> String
+printExpr (Lit i)   = show i
+printExpr (Add x y) = unwords [printExpr x, "+", printExpr y]
+```
