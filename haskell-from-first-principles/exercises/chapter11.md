@@ -318,7 +318,24 @@ f Friday = "Miller Time"
 ### Ciphers
 
 ```haskell
--- TODO
+import Data.Char (chr, ord)
+import Data.List (foldl')
+
+cycled :: String -> String -> String
+cycled msg key = (snd . foldl' f (0, "")) msg
+  where len = length key
+        f (i, s) c
+            | c == ' '  = (i, s ++ " ")
+            | otherwise = (i + (mod 1 len), s ++ [key !! (mod i len)])
+
+shift :: Char -> Char -> Char
+shift o c
+    | c == ' '  = o
+    | otherwise = chr $ (mod (ord o - ord 'A' + diff) 26) + ord 'A'
+  where diff = ord c - ord 'A'
+
+cipher :: String -> String -> String
+cipher msg key = zipWith shift msg $ cycled msg key
 ```
 
 ### As-patterns
