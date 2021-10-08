@@ -38,11 +38,18 @@ notThe str = if str == "the" then Nothing else Just str
     vowel-initial word.
 -}
 countTheBeforeVowel :: String -> Integer
-countTheBeforeVowel = undefined
+countTheBeforeVowel str
+    | length str < 5 = 0
+    | vowelCheck     = (+1) $ countTheBeforeVowel $ drop 5 str
+    | otherwise      = (+0) $ countTheBeforeVowel $ tail str
+  where vowelCheck = take 4 str == "the " && elem (str !! 4) "aeiouAEIOU"
 
 -- 3. Return the number of letters that are vowels in a word.
 countVowels :: String -> Integer
-countVowels = toInteger . length . filter (`elem` "aeiou")
+countVowels = toInteger . length . filter (`elem` "aeiouAEIOU")
+
+countVowels' :: String -> Integer
+countVowels' = foldr (\x acc -> if elem x "aeiouAEIOU" then acc + 1 else acc) 0
 ```
 
 ### Validate the word
@@ -180,15 +187,17 @@ eitherMaybe'' f = either' (const Nothing) (Just . f)
 ```haskell
 -- 1. Write the function `myIterate` using direct recursion.
 myIterate :: (a -> a) -> a -> [a]
-myIterate = undefined
+myIterate f a = a : myIterate f (f a)
 
 -- 2. Write the function `myUnfoldr` using direct recursion.
 myUnfoldr :: (b -> Maybe (a, b)) -> b -> [a]
-myUnfoldr = undefined
+myUnfoldr f b = case f b of
+    Nothing     -> []
+    Just (x, y) -> x : myUnfoldr f y
 
 -- 3. Rewrite `myIterate` into `betterIterate` using `myUnfoldr`.
 betterIterate :: (a -> a) -> a -> [a]
-betterIterate = undefined
+betterIterate f = myUnfoldr (\x -> Just (x, f x))
 ```
 
 ### Finally something other than a list!
@@ -197,12 +206,18 @@ betterIterate = undefined
 data BinaryTree a
     = Leaf
     | Node (BinaryTree a) a (BinaryTree a)
+  deriving (Eq, Ord, Show)
 
 -- 1. Write `unfold` for `BinaryTree`.
 unfold :: (a -> Maybe (a, b, a)) -> a -> BinaryTree b
-unfold = undefined
+unfold f n = case f n of
+    Nothing        -> Leaf
+    Just (x, y, z) -> Node (unfold f x) y (unfold f z)
 
 -- 2. Make a tree builder.
 treeBuild :: Integer -> BinaryTree Integer
-treeBuild n = undefined
+treeBuild n = unfold f 0
+  where f x
+          | x == n    = Nothing
+          | otherwise = Just (x + 1, x, x + 1)
 ```
