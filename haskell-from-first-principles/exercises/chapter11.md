@@ -380,7 +380,47 @@ capitalizeParagraph (x:xs)= checkStart $ words $ toUpper x : xs
 ### Phone exercise
 
 ```haskell
--- TODO
+-- 1. Create a phone input data structure.
+data DaPhone
+
+type Digit   = Char
+type Presses = Int
+
+{- 2. Convert the following conversations into the key presses required to
+express them. -}
+convo :: [String]
+convo = [ "Wanna play 20 questions"
+        , "Ya"
+        , "U 1st haha"
+        , "Lol OK. Have u ever tasted alcohol"
+        , "Lol ya"
+        , "Wow ur cool haha. Ur turn"
+        , "OK. Do u think I am pretty Lol"
+        , "Lol ya"
+        , "Just making sure rofl ur turn"
+        ]
+
+reverseTaps :: DaPhone -> Char -> [(Digit, Presses)]
+reverseTaps = undefined
+
+cellPhonesDead :: DaPhone -> String -> [(Digit, Presses)]
+cellPhonesDead = undefined
+
+-- 3. How many times do digits need to be pressed for each message?
+fingerTaps :: [(Digit, Presses)] -> Presses
+fingerTaps = undefined
+
+-- 4. What is the most popular letter for each message?
+mostPopularLetter :: String -> Char
+mostPopularLetter = undefined
+
+{- 5. What is the most popular letter overall? What is the overall most popular
+word? -}
+coolestLtr :: [String] -> Char
+coolestLtr = undefined
+
+coolestWord :: [String] -> String
+coolestWord = undefined
 ```
 
 ### Hutton's Razor
