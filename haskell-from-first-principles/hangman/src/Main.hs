@@ -44,22 +44,23 @@ randomWord (WordList wl) = do
 randomWord' :: IO String
 randomWord' = gameWords >>= randomWord
 
-data Puzzle = Puzzle String [Maybe Char] [Char]
+data Puzzle = Puzzle String [Maybe Char] [Char] Int
 
 instance Show Puzzle where
-  show (Puzzle _ discovered guessed) =
+  show (Puzzle _ discovered guessed wrong) =
     (intersperse ' ' $ fmap renderPuzzleChar discovered)
     ++ "  ||  Guessed so far: " ++ guessed
+    ++ "  ||  Wrong Guesses: "  ++ show wrong
 
 freshPuzzle :: String -> Puzzle
-freshPuzzle str = Puzzle str fresh []
+freshPuzzle str = Puzzle str fresh [] 0
   where fresh = replicate (length str) Nothing
 
 charInWord :: Puzzle -> Char -> Bool
-charInWord (Puzzle str _ _) c = elem c str
+charInWord (Puzzle str _ _ _) c = elem c str
 
 alreadyGuessed :: Puzzle -> Char -> Bool
-alreadyGuessed (Puzzle _ _ guessed) c = elem c guessed
+alreadyGuessed (Puzzle _ _ guessed _) c = elem c guessed
 
 renderPuzzleChar :: Maybe Char -> Char
 renderPuzzleChar mbChar = case mbChar of
@@ -67,8 +68,8 @@ renderPuzzleChar mbChar = case mbChar of
   Nothing -> '_'
 
 fillInCharacter :: Puzzle -> Char -> Puzzle
-fillInCharacter (Puzzle word filledInSoFar s) c =
-  Puzzle word newFilledInSoFar (c : s)
+fillInCharacter (Puzzle word filledInSoFar s wrong) c =
+  Puzzle word newFilledInSoFar (c : s) wrong
   where zipper guessed wordChar guessChar = 
           if wordChar == guessed
             then Just wordChar
@@ -76,7 +77,7 @@ fillInCharacter (Puzzle word filledInSoFar s) c =
         newFilledInSoFar = zipWith (zipper c) word filledInSoFar
 
 handleGuess :: Puzzle -> Char -> IO Puzzle
-handleGuess puzzle guess = do
+handleGuess puzzle@(Puzzle w f g i) guess = do
   case (charInWord puzzle guess, alreadyGuessed puzzle guess) of
     (_, True) -> do
       putStrLn "You already guessed that character, pick something else!\n"
@@ -89,11 +90,11 @@ handleGuess puzzle guess = do
     
     (False, _) -> do
       putStrLn "This character wasn't in the word, try again.\n"
-      pure (fillInCharacter puzzle guess)
+      pure (fillInCharacter (Puzzle w f g (i + 1)) guess)
 
 gameOver :: Puzzle -> IO ()
-gameOver (Puzzle wordToGuess _ guessed) =
-  if (length guessed) > 10
+gameOver (Puzzle wordToGuess _ _ wrong) =
+  if wrong == 6
     then do
       putStrLn "You lose!"
       putStrLn $ "The word was: " ++ wordToGuess
@@ -101,7 +102,7 @@ gameOver (Puzzle wordToGuess _ guessed) =
     else pure ()
 
 gameWin :: Puzzle -> IO ()
-gameWin (Puzzle wordToGuess filledInSoFar _) =
+gameWin (Puzzle wordToGuess filledInSoFar _ _) =
   if all isJust filledInSoFar
     then do
       putStrLn $ "You win! The word was: " ++ wordToGuess
@@ -109,12 +110,71 @@ gameWin (Puzzle wordToGuess filledInSoFar _) =
     else pure ()
 
 runGame :: Puzzle -> IO ()
-runGame puzzle = forever $ do
+runGame puzzle@(Puzzle _ _ _ wrong) = forever $ do
   gameOver puzzle
   gameWin puzzle
+  putStrLn $ drawHangman wrong
   putStrLn $ "Current puzzle is: " ++ show puzzle
   putStr "Guess a letter: "
   guess <- getLine
   case guess of
     [c] -> handleGuess puzzle c >>= runGame
     _   -> putStrLn "Your guess must be a single character.\n"
+
+drawHangman :: Int -> String
+drawHangman 6 =
+  " o---,  \n\
+  \ |   O  \n\
+  \ |  /|\\ \n\
+  \ |   |  \n\
+  \ |  / \\ \n\
+  \/|\\"
+
+drawHangman 5 =
+  " o---,  \n\
+  \ |   O  \n\
+  \ |  /|\\ \n\
+  \ |   |  \n\
+  \ |  /   \n\
+  \/|\\"
+
+drawHangman 4 =
+  " o---,  \n\
+  \ |   O  \n\
+  \ |  /|\\ \n\
+  \ |   |  \n\
+  \ |      \n\
+  \/|\\"
+
+drawHangman 3 =
+  " o---,  \n\
+  \ |   O  \n\
+  \ |  /|  \n\
+  \ |   |  \n\
+  \ |      \n\
+  \/|\\"
+
+drawHangman 2 =
+  " o---,  \n\
+  \ |   O  \n\
+  \ |   |  \n\
+  \ |   |  \n\
+  \ |      \n\
+  \/|\\"
+
+drawHangman 1 =
+  " o---,  \n\
+  \ |   O  \n\
+  \ |      \n\
+  \ |      \n\
+  \ |      \n\
+  \/|\\"
+
+drawHangman _ =
+  " o---,  \n\
+  \ |      \n\
+  \ |      \n\
+  \ |      \n\
+  \ |      \n\
+  \/|\\"
+  

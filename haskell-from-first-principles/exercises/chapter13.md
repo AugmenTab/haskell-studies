@@ -54,17 +54,14 @@ writeTimestamp s path = do
 
 Alter the Hangman game so that it ends after a number of incorrect guesses, and doesn't tell you that you lost if you guess the last letter on the last try.
 
-TODO
+[Hangman Game](../hangman/src/Main.hs)
 
 ### Modifying code
 
-```haskell
-{-
-  1. Open your ciphers module, and modify it so that the Caesar and Vigenère
-  ciphers work with user input.
--}
--- TODO
+1. Open your ciphers module, and modify it so that the Caesar and Vigenère ciphers work with user input.
+    * TODO
 
+```haskell
 {-
   2. Here is a very simple, short block of code. Notice it has a `forever` that
   will make it keep running, over and over again. Load it into your REPL, and
