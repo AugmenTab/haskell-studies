@@ -59,7 +59,7 @@ Alter the Hangman game so that it ends after a number of incorrect guesses, and 
 ### Modifying code
 
 1. Open your ciphers module, and modify it so that the Caesar and Vigenère ciphers work with user input.
-    * TODO
+    * [Cipher.hs](../test-files/Cipher.hs)
 
 ```haskell
 {-
