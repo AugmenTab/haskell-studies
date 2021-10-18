@@ -10,3 +10,5 @@ Write `hspec` tests for the function `multWithSum` you wrote in the Chapter Exer
 
 [Morse.hs](../morse)
 
+### Chapter exercises
+

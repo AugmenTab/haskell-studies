@@ -3,7 +3,6 @@ module Main where
 
 import Control.Monad (forever, when)
 import Data.List (intercalate)
-import Data.Traversable (traverse)
 import System.Environment (getArgs)
 import System.Exit (exitFailure, exitSuccess)
 import System.IO (hGetLine, hIsEOF, stdin)
@@ -20,10 +19,10 @@ main = do
         "to"   -> convertToMorse
         _      -> argError
     _ -> argError
-      where argError = do
-        putStrLn "Please specify the first argument as being\
-                  \ 'from' or 'to' morse, such as: morse to"
-        exitFailure
+    where argError = do
+            putStrLn "Please specify the first argument as being\
+                     \ 'from' or 'to' morse, such as: morse to"
+            exitFailure
 
 convertToMorse :: IO ()
 convertToMorse = forever $ do
@@ -51,7 +50,10 @@ convertFromMorse = forever $ do
   convertLine line
     where
       convertLine line = do
-        case traverse morseToChar (words line) of
+        let decoded :: Maybe String
+            decoded = traverse morseToChar (words line)
+
+        case decoded of
           Just s  -> putStrLn s
           Nothing -> do
             putStrLn $ "ERROR: " ++ line
